@@ -116,6 +116,7 @@ def createAuthToken(username):
     token = str(token_bytes(32))
     userAndToken = UserAuthTokens(username=username, token=token, timestamp=time.time())
     
+    #save token in database for comparison
     userAndToken.save()
 
     #key generated using secrets.token_bytes(32)
