@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import HomePage from "./Pages/HomePage";
+import LandingPage from "./Pages/LandingPage";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
 
@@ -12,7 +14,8 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          {/* <Route exact path="/" component={Temp} /> */}
+          <Route exact path="/" component={LandingPage} />
+		  <Route path="/home" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignupPage} />
         </div>

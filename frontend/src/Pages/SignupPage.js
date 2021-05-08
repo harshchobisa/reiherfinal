@@ -71,9 +71,11 @@ export default class SignupPage extends Component {
               <option>mentee</option>
             </Form.Control>
           </Form.Group>
-          <Button variant="primary" type="submit" onClick={this.onSubmit}>
+          <Button variant="outline-success" type="submit" onClick={this.onSubmit}>
             Submit
           </Button>
+          <Button href="#/login" variant="outline-secondary">Already have an account? Sign in here.</Button>{' '}
+
         </Form>
       </Container>
     );

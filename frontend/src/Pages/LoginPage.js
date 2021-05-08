@@ -56,9 +56,10 @@ export default class LoginPage extends Component {
               onChange={(e) => this.setState({ password: e.target.value })}
             />
           </Form.Group>
-          <Button variant="primary" type="submit" onClick={this.onSubmit}>
+          <Button variant="outline-success" type="submit" onClick={this.onSubmit}>
             Submit
           </Button>
+		  <Button href="#/signup" variant="outline-secondary">Don't have an account? Make one here.</Button>{' '}
         </Form>
       </Container>
     );
