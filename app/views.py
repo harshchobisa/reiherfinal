@@ -36,8 +36,19 @@ def create_user(request):
     except Exception as e:
         return HttpResponse(status=401)
 
+
+    #hash password
+    key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+    passwordbytes = bytes(password, 'utf-8')
+    keybytes = bytes(key, 'utf-8')
+
+    h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+    hashedPassword = str(h.hexdigest())
+    
+
+
     #save user in database
-    user = Users(username=username, password=password, role=role)
+    user = Users(username=username, password=hashedPassword, role=role)
     try:
         user.save()
         return HttpResponse("user succesfully created", status=201)
@@ -60,13 +71,22 @@ def login(request):
     except:
         return HttpResponse("missing/blank username or password", status=401)
 
+    #hash password
+    key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+    passwordbytes = bytes(password, 'utf-8')
+    keybytes = bytes(key, 'utf-8')
+
+    h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+    hashedPassword = str(h.hexdigest())
+    
+
     #make sure user exists
     try:
-        user_count = Users.objects.filter(username=username, password=password).count()
+        user_count = Users.objects.filter(username=username, password=hashedPassword).count()
         if user_count != 1:
-            return HttpResponse("unable to find user", status=402)
+            return HttpResponse("unable to find user", status=404)
     except:
-        return HttpResponse("unable to find user", status=402)
+        return HttpResponse("unable to find user", status=404)
 
     #create authentication token for session
     token = createAuthToken(username)
