@@ -1,17 +1,40 @@
 import React, { Component } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 export default class SignupPage extends Component {
   state = {
     email: "",
     password: "",
     role: "",
+    submitted: false,
   };
 
   onSubmit = () => {
-    console.log("email " + this.state.email);
-    console.log("pass " + this.state.password);
-    console.log("role " + this.state.role);
+    var data = {
+        "email": this.state.email,
+        "password": this.state.password,
+        "role": this.state.role,
+    }
+
+    var config = {
+      method: "post",
+      url: "//localhost:8000/createUser/",
+      headers: {
+        "Content-Type": "text/plain",
+        'Access-Control-Allow-Origin': '*',
+      },
+      data: data,
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log(response.status);
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   render() {
