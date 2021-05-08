@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
+import {NavLink} from 'react-router-dom';
 
 export default class SignupPage extends Component {
   state = {
@@ -49,7 +50,6 @@ export default class SignupPage extends Component {
               We'll never share your email with anyone else.
             </Form.Text>
           </Form.Group>
-
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
@@ -59,7 +59,6 @@ export default class SignupPage extends Component {
               onChange={(e) => this.setState({ password: e.target.value })}
             />
           </Form.Group>
-
           <Form.Group controlId="ControlInput1">
             <Form.Label>Role</Form.Label>
             <Form.Control
@@ -71,11 +70,12 @@ export default class SignupPage extends Component {
               <option>mentee</option>
             </Form.Control>
           </Form.Group>
-          <Button variant="outline-success" type="submit" onClick={this.onSubmit}>
-            Submit
-          </Button>
-          <Button href="#/login" variant="outline-secondary">Already have an account? Sign in here.</Button>{' '}
-
+		  <NavLink to="/home/" onClick = {this.onSubmit}>
+			  Submit
+		  </NavLink>
+          <Button href="#/login" variant="outline-secondary">
+            Already have an account? Sign in here.
+          </Button>{" "}
         </Form>
       </Container>
     );
