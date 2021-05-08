@@ -63,11 +63,13 @@ export default class SignupPage extends Component {
           <Form.Group controlId="ControlInput1">
             <Form.Label>Role</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Role"
-              value={this.state.role}
+              as="select"
+              custom
               onChange={(e) => this.setState({ role: e.target.value })}
-            />
+            >
+              <option>mentor</option>
+              <option>mentee</option>
+            </Form.Control>
           </Form.Group>
           <Button variant="primary" type="submit" onClick={this.onSubmit}>
             Submit
