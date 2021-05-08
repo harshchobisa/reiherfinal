@@ -69,13 +69,6 @@ export default class SignupPage extends Component {
               onChange={(e) => this.setState({ role: e.target.value })}
             />
           </Form.Group>
-
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check
-              type="checkbox"
-              label="I agree to the terms and conditions"
-            />
-          </Form.Group>
           <Button variant="primary" type="submit" onClick={this.onSubmit}>
             Submit
           </Button>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 export default class LoginPage extends Component {
   state = {
@@ -8,8 +9,24 @@ export default class LoginPage extends Component {
   };
 
   onSubmit = () => {
-    console.log("email" + this.state.email);
-    console.log("pass" + this.state.password);
+	var data = JSON.stringify({"username":this.state.email,"password":this.state.password});
+    var config = {
+      method: "post",
+      url: "//localhost:8000/login/",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      data: data,
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log(response.status);
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   render() {
