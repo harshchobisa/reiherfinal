@@ -11,7 +11,7 @@ export default class LoginPage extends Component {
 
   onSubmit = () => {
     var data = JSON.stringify({
-      username: this.state.email,
+      email: this.state.email,
       password: this.state.password,
     });
     var config = {
