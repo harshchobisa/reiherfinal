@@ -22,7 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.login),
     path('createUser/', views.create_user),
-    path('authTest/', views.auth_test)
+    path('authTest/', views.auth_test),
+    path('createMentor/', views.create_mentor),
+    path('createMentee/', views.create_mentee)
 
 
 ]

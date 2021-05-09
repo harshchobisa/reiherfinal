@@ -8,7 +8,7 @@ import hmac
 import hashlib
 import time
 
-from app.models import Users, UserAuthTokens
+from app.models import Users, UserAuthTokens, Mentors, Mentees
 
 @csrf_exempt #NEED TO FIGURE OUT WHAT THIS IS!
 def create_user(request):
@@ -52,6 +52,99 @@ def create_user(request):
     try:
         user.save()
         return HttpResponse("user succesfully created", status=201)
+    except:
+        return HttpResponse("error saving user", status=401)
+
+@csrf_exempt
+def create_mentor(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    #input validation
+    requiredFields = ['firstName', 'lastName', 'year', 
+            'gender', 'major', 'mentorType', 'firstActivity', 'secondActivity', 'thirdActivity',
+            'fourthActivity', 'fifthActivity']
+    try:
+        payload = json.loads(request.body)
+        for field in requiredFields:
+            if payload[field] == "":
+                return HttpResponse("missing required fields", status=401)
+    except:
+        return HttpResponse("missing required fields", status=401)
+
+    #make sure this api is only accessible to mentors
+    try:
+        user = Users.objects.get(email=request.session["email"])
+        print(user.role)
+        if user.role != "mentor":
+            return HttpResponse("not authorized--must be a mentor to create mentor profile", status=401)
+
+    except Exception:
+        # print(Exception.with_traceback)
+        return HttpResponse("unable to find user", status=404)
+    
+
+    #!TODO do some primary/foreign key business to make sure unique emails being inserted
+
+    #save mentor in database
+    mentor = Mentors(email=request.session["email"],firstName=payload["firstName"],lastName=payload["lastName"],year=payload["year"],
+        gender=payload["gender"],major=payload["major"],mentorType=payload["mentorType"],
+        firstActivity=payload["firstActivity"],secondActivity=payload["secondActivity"],thirdActivity=payload["thirdActivity"],
+        fourthActivity=payload["fourthActivity"],fifthActivity=payload["fifthActivity"])
+
+    try:
+        mentor.save()
+        return HttpResponse("mentor succesfully created", status=201)
+    except:
+        return HttpResponse("error saving user", status=401)
+
+@csrf_exempt
+def create_mentee(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    # input validation
+    requiredFields = ['firstName', 'lastName', 'year', 
+            'gender', 'major', 'menteeType', 'firstActivity', 'secondActivity', 'thirdActivity',
+            'fourthActivity', 'fifthActivity']
+    try:
+        payload = json.loads(request.body)
+        for field in requiredFields:
+            if payload[field] == "":
+                return HttpResponse("missing required fields", status=401)
+    except:
+        return HttpResponse("missing required fields", status=401)
+    
+    #make sure this api is only accessible to mentees
+    try:
+        user = Users.objects.get(email=request.session["email"])
+        if user.role != "mentee":
+            return HttpResponse("not authorized--must be a mentee to create mentee profile", status=401)
+
+    except:
+        return HttpResponse("unable to find user", status=404)
+
+    #!TODO do some primary/foreign key business to make sure unique emails being inserted
+
+    #save mentee in database
+    mentee = Mentees(email=request.session["email"],firstName=payload["firstName"],lastName=payload["lastName"],year=payload["year"],
+        gender=payload["gender"],major=payload["major"],menteeType=payload["menteeType"],
+        firstActivity=payload["firstActivity"],secondActivity=payload["secondActivity"],thirdActivity=payload["thirdActivity"],
+        fourthActivity=payload["fourthActivity"],fifthActivity=payload["fifthActivity"])
+
+    try:
+        mentee.save()
+        return HttpResponse("mentee succesfully created", status=201)
     except:
         return HttpResponse("error saving user", status=401)
 
@@ -110,8 +203,10 @@ def auth_test(request):
     return HttpResponse("not authenticated", status=404)
 
 #checks that the user's session is authenticated
-def checkAuthToken(email, token):
+def checkAuthToken(request):
     try:
+        email = request.session['email'] 
+        token = request.session['token']
         #get the most recent token entry in the database for the user
         userAndToken = UserAuthTokens.objects.filter(email=email).order_by('-timestamp')[0]
         
