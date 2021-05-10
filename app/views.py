@@ -245,14 +245,45 @@ def createAuthToken(email):
     return hashedToken
 
 
-#create admin thing too
+@csrf_exempt
+def get_all_families(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
 
-# @csrf_exempt
-# def getAllFamily(request):
-#     pass
+    #make sure this api is only accessible to admins
+    try:
+        user = Users.objects.get(email=request.session["email"])
+        if user.role != "admin":
+            return HttpResponse("not authorized--must be admin to see all families", status=401)
+
+    except Exception:
+        return HttpResponse("unable to find user", status=404)
+
+    try:
+        familyids = Pairings.objects.values_list('familyid', flat=True).distinct()
+    except Exception:
+        print(Exception)
+        return HttpResponse("error getting family ids", status=404)
+    
+    allFamilies = []
+    try:
+        for id in familyids:
+            allFamilies.append(getFamily(id))
+    except Exception:
+        print(Exception)
+        return HttpResponse("error getting families", status=404)
+
+    return JsonResponse(allFamilies, safe=False)
+
+
 
 @csrf_exempt
-def get_family(request):
+def get_user_family(request):
     #only accept post requests
     if request.method != "POST":
         return HttpResponse("only POST calls accepted", status=404)
@@ -277,11 +308,7 @@ def get_family(request):
     
     #using the user's familyid, get all members in the family
     try:
-        family = Pairings.objects.filter(familyid=familyid)
-        familyUsers = []
-        for member in family:
-            print(member)
-            familyUsers.append(getUserInfo(member.email))
+        familyUsers = getFamily(familyid)
     except Exception:
         return HttpResponse("error getting user's family", status=404)
     
@@ -317,10 +344,40 @@ def getUserInfo(email):
 
     return info
 
+#gets a family given the familyid
+def getFamily(familyid):
+    try:
+        family = Pairings.objects.filter(familyid=familyid)
+        familyUsers = []
+        for member in family:
+            familyUsers.append(getUserInfo(member.email))
+    except Exception:
+        return None
+
+    return familyUsers;
 
 
-
+@csrf_exempt
+def create_families(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
     
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    #make sure this api is only accessible to admins
+    try:
+        user = Users.objects.get(email=request.session["email"])
+        if user.role != "admin":
+            return HttpResponse("not authorized--must be admin to create families", status=401)
+
+    except Exception:
+        return HttpResponse("unable to find user", status=404)
+
+
+    return HttpResponse("families succesfully created", status=200)
 
 
     
