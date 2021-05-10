@@ -39,3 +39,8 @@ class Mentees(models.Model):
     fourthActivity = models.CharField(max_length=50)
     fifthActivity = models.CharField(max_length=50)
 
+class Pairings(models.Model):
+    email = models.CharField(max_length=50)
+    familyid = models.IntegerField()
+
+
