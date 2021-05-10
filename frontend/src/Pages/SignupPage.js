@@ -13,7 +13,7 @@ export default class SignupPage extends Component {
 
   onSubmit = () => {
     //   weird formatting for payload, should fix this later
-    var data = `{\n    "username": "${this.state.email}",\n    "password": "${this.state.password}",\n    "role": "${this.state.role}"\n}`;
+    var data = `{\n    "email": "${this.state.email}",\n    "password": "${this.state.password}",\n    "role": "${this.state.role}"\n}`;
     var config = {
       method: "post",
       url: "//localhost:8000/createUser/",
