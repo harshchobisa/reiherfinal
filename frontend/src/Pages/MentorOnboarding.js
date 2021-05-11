@@ -3,7 +3,7 @@ import { Container, Form, Col } from "react-bootstrap";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
-export default class Onboarding extends Component {
+export default class MentorOnboarding extends Component {
   state = {
     firstName: "",
     lastName: "",
@@ -46,7 +46,7 @@ export default class Onboarding extends Component {
   render() {
     return (
       <Container>
-        <h1>Onboarding Page</h1>
+        <h1>Mentor Onboarding Page</h1>
         <Form>
           <Form.Row>
             <Form.Group as={Col}>
