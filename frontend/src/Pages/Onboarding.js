@@ -7,10 +7,10 @@ export default class Onboarding extends Component {
   state = {
     firstName: "",
     lastName: "",
-    year: "",
-    gender: "",
-    major: "",
-    mentorType: "",
+    year: "2022",
+    gender: "Male",
+    major: "Computer Science",
+    mentorType: "Academic",
     firstActivity: "dummy",
     secondActivity: "dummy",
     thirdActivity: "dummy",
@@ -124,6 +124,76 @@ export default class Onboarding extends Component {
               <option>Social</option>
             </Form.Control>
           </Form.Group>
+          <Form.Group controlId="ControlInput1">
+            <Form.Label>Activity One</Form.Label>
+            <Form.Control
+              as="select"
+              custom
+              onChange={(e) => this.setState({ firstActivity: e.target.value })}
+            >
+              <option>Temp1</option>
+              <option>Temp2</option>
+              <option>Temp3</option>
+              <option>Temp4</option>
+              <option>Temp5</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="ControlInput1">
+            <Form.Label>Activity Two</Form.Label>
+            <Form.Control
+              as="select"
+              custom
+              onChange={(e) => this.setState({ secondActivity: e.target.value })}
+            >
+              <option>Temp1</option>
+              <option>Temp2</option>
+              <option>Temp3</option>
+              <option>Temp4</option>
+              <option>Temp5</option>
+            </Form.Control>
+          </Form.Group>          
+          <Form.Group controlId="ControlInput1">
+            <Form.Label>Activity Three</Form.Label>
+            <Form.Control
+              as="select"
+              custom
+              onChange={(e) => this.setState({ thirdActivity: e.target.value })}
+            >
+              <option>Temp1</option>
+              <option>Temp2</option>
+              <option>Temp3</option>
+              <option>Temp4</option>
+              <option>Temp5</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="ControlInput1">
+            <Form.Label>Activity Four</Form.Label>
+            <Form.Control
+              as="select"
+              custom
+              onChange={(e) => this.setState({ fourthActivity: e.target.value })}
+            >
+              <option>Temp1</option>
+              <option>Temp2</option>
+              <option>Temp3</option>
+              <option>Temp4</option>
+              <option>Temp5</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="ControlInput1">
+            <Form.Label>Activity Five</Form.Label>
+            <Form.Control
+              as="select"
+              custom
+              onChange={(e) => this.setState({ fifthActivity: e.target.value })}
+            >
+              <option>Temp1</option>
+              <option>Temp2</option>
+              <option>Temp3</option>
+              <option>Temp4</option>
+              <option>Temp5</option>
+            </Form.Control>
+          </Form.Group> 
           <NavLink to="/home/" onClick={this.onSubmit}>
             Submit
           </NavLink>
