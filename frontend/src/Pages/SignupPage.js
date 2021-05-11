@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
-import {NavLink} from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 
 export default class SignupPage extends Component {
   state = {
@@ -70,12 +70,18 @@ export default class SignupPage extends Component {
               <option>mentee</option>
             </Form.Control>
           </Form.Group>
-		  <NavLink to="/home/" onClick = {this.onSubmit}>
-			  Submit
-		  </NavLink>
-          <Button href="#/login" variant="outline-secondary">
-            Already have an account? Sign in here.
-          </Button>{" "}
+          <Col>
+            <Row>
+              <NavLink to="#/home/" onClick={this.onSubmit}>
+                Submit
+              </NavLink>
+            </Row>
+            <Row>
+              <Button href="#/login/" variant="outline-secondary">
+                Already have an account? Sign in here.
+              </Button>
+            </Row>
+          </Col>
         </Form>
       </Container>
     );

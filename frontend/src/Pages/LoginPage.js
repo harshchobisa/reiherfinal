@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
@@ -63,12 +63,18 @@ export default class LoginPage extends Component {
               onChange={(e) => this.setState({ password: e.target.value })}
             />
           </Form.Group>
-          <NavLink to="/home/" onClick={this.onSubmit}>
-            Submit
-          </NavLink>
-          <Button href="#/signup" variant="outline-secondary">
-            Don't have an account? Make one here.
-          </Button>{" "}
+          <Col>
+            <Row>
+              <NavLink to="#/home/" onClick={this.onSubmit}>
+                Submit
+              </NavLink>
+            </Row>
+            <Row>
+              <Button href="#/signup/" variant="outline-secondary">
+                Don't have an account? Make one here.
+              </Button>
+            </Row>
+          </Col>
         </Form>
       </Container>
     );
