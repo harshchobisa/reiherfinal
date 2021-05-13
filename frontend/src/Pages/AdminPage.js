@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default class AdminPage extends Component {
   state = {
-    families: null,
+    families: [],
   };
   componentDidMount() {
     var config = {
@@ -16,10 +16,10 @@ export default class AdminPage extends Component {
       withCredentials: true,
     };
     axios(config)
-      .then(function (response) {
+      .then((response) => {
+        this.setState({ families: response.data });
         console.log(response.status);
         console.log(JSON.stringify(response.data));
-        this.setState({ families: JSON.stringify(response.data) });
       })
       .catch(function (error) {
         console.log(error);
@@ -50,11 +50,8 @@ export default class AdminPage extends Component {
     return (
       <Container>
         <h1>This is the admin page</h1>
-        <p>Here are the families {this.state.families} end</p>
-        <Button
-          variant="outline-secondary"
-          onClick={this.onSubmit}
-        >
+        <p>Here are the families {JSON.stringify(this.state.families)}</p>
+        <Button variant="outline-secondary" onClick={this.onSubmit}>
           Run pairings
         </Button>{" "}
       </Container>
