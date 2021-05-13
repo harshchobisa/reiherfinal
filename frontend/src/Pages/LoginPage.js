@@ -8,7 +8,6 @@ export default class LoginPage extends Component {
     email: "",
     password: "",
   };
-
   onSubmit = () => {
     var data = JSON.stringify({
       email: this.state.email,
@@ -25,12 +24,13 @@ export default class LoginPage extends Component {
     };
 
     axios(config)
-      .then(function (response) {
+      .then((response) => {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
         if (response.status === 200) {
           console.log("redirect");
         }
+        this.props.handler(this.state.email);
       })
       .catch(function (error) {
         console.log(error);

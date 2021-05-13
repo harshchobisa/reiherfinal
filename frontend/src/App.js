@@ -19,6 +19,16 @@ class App extends Component {
   state = {
     user: "",
   };
+  constructor(props) {
+    super(props);
+    this.handler = this.handler.bind(this);
+  }
+  handler(username) {
+    console.log(`in handler ${username}`);
+
+    this.setState({ user: username });
+  }
+
   render() {
     return (
       <Container>
@@ -29,12 +39,20 @@ class App extends Component {
             <Nav.Link href="#login">Login</Nav.Link>
             <Nav.Link href="#home">Dashboard</Nav.Link>
           </Nav>
+          <Navbar.Collapse className="justify-content-end">
+            <Navbar.Text>
+              Signed in as: <a href="#login">{this.state.user}</a>
+            </Navbar.Text>
+          </Navbar.Collapse>
         </Navbar>
         <HashRouter>
           <div className="App">
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={HomePage} />
-            <Route path="/login" component={LoginPage} />
+            <Route
+              path="/login"
+              render={() => <LoginPage handler={this.handler} />}
+            />
             <Route path="/signup" component={SignupPage} />
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
