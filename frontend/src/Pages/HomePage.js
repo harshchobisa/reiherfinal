@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import FamilyView from "../Components/FamilyView";
 
 export default class HomePage extends Component {
   state = {
@@ -36,8 +37,7 @@ export default class HomePage extends Component {
             <NavLink to="/mentor_onboarding/">Complete your profile</NavLink>
           </Row>
           <Row>
-            {/* <NavLink to="/family/">View your family</NavLink> */}
-            <p>Your family is {JSON.stringify(this.state.family)}</p>
+            <FamilyView family={this.state.family}></FamilyView>
           </Row>
         </Col>
       </Container>
