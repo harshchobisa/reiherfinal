@@ -1,8 +1,31 @@
 import React, { Component } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 
 export default class HomePage extends Component {
+  state = {
+    family: [],
+  };
+  componentDidMount() {
+    var config = {
+      method: "post",
+      url: "//localhost:8000/getFamily/",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      withCredentials: true,
+    };
+    axios(config)
+      .then((response) => {
+        this.setState({ family: response.data });
+        console.log(response.status);
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
   render() {
     return (
       <Container>
@@ -13,7 +36,8 @@ export default class HomePage extends Component {
             <NavLink to="/mentor_onboarding/">Complete your profile</NavLink>
           </Row>
           <Row>
-            <NavLink to="/family/">View your family</NavLink>
+            {/* <NavLink to="/family/">View your family</NavLink> */}
+            <p>Your family is {JSON.stringify(this.state.family)}</p>
           </Row>
         </Col>
       </Container>
