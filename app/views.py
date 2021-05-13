@@ -380,6 +380,71 @@ def create_families(request):
     return HttpResponse("families succesfully created", status=200)
 
 
+@csrf_exempt
+def has_completed_profile(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
     
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
 
+    #input validation
+    try:
+        email = request.session['email']
+    except:
+        return HttpResponse("missing required fields", status=401)
+        
+    #get the user's role so we know which table to look in
+    try:
+        user = Users.objects.get(email=email)
+    except:
+        return None
+    
+    role = user.role
+
+    #look for this user in mentor and mentee database
+    try:
+        if role == "mentor":
+            user = Mentors.objects.get(email=email)
+            if user:
+                return HttpResponse(True, status=200)
+        elif role == "mentee":
+            user = Mentees.objects.get(email=email)
+            if user:
+                return HttpResponse(True, status=200)
+        return HttpResponse(False, status=200)
+    except:
+        return HttpResponse(False, status=200)
+
+
+@csrf_exempt
+def is_mentor(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    #input validation
+    try:
+        email = request.session['email']
+    except:
+        return HttpResponse("missing required fields", status=401)
+        
+    #get the user's role so we know which table to look in
+    try:
+        user = Users.objects.get(email=email)
+    except:
+        return None
+    
+    role = user.role
+
+    if role == "mentor":
+        return HttpResponse(True, status=200)
+    else:
+        return HttpResponse(False, status=200)
 

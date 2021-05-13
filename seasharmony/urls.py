@@ -27,8 +27,7 @@ urlpatterns = [
     path('createMentee/', views.create_mentee),
     path('getFamily/', views.get_user_family),
     path('createFamilies/', views.create_families),
-    path('getAllFamilies/', views.get_all_families)
-
-
-
+    path('getAllFamilies/', views.get_all_families),
+    path('hasCompletedProfile/', views.has_completed_profile),
+    path('isMentor/', views.is_mentor),
 ]
