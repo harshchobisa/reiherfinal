@@ -10,6 +10,10 @@ import time
 
 from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings
 
+@csrf_exempt
+def index(request): 
+    return render(request, "build/index.html")
+
 @csrf_exempt #NEED TO FIGURE OUT WHAT THIS IS!
 def create_user(request):
     #only accept post requests
