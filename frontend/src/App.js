@@ -7,6 +7,7 @@ import SignupPage from "./Pages/SignupPage";
 import MentorOnboarding from "./Pages/MentorOnboarding";
 import MenteeOnboarding from "./Pages/MenteeOnboarding";
 import FamilyPage from "./Pages/FamilyPage";
+import AdminPage from "./Pages/AdminPage";
 
 import "./App.css";
 import { HashRouter, Route } from "react-router-dom";
@@ -15,6 +16,9 @@ import { Nav, Navbar, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends Component {
+  state = {
+    user: "",
+  };
   render() {
     return (
       <Container>
@@ -35,6 +39,8 @@ class App extends Component {
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
             <Route path="/mentee_onboarding" component={MenteeOnboarding} />
+            <Route path="/mentee_onboarding" component={MenteeOnboarding} />
+            <Route path="/admin" component={AdminPage} />
           </div>
         </HashRouter>
       </Container>
