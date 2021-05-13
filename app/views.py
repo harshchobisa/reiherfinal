@@ -464,3 +464,20 @@ def logout(request):
         return HttpResponse("success", status=200)
     except:
         return HttpResponse("error", status=404)
+
+@csrf_exempt
+def get_current_user(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    try:
+        email = request.session['email']
+        return HttpResponse(email, status=200)
+    except:
+        return HttpResponse("unable to get current user", status=404)
+
