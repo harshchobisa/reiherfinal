@@ -40,8 +40,9 @@ class App extends Component {
             <Nav.Link href="#home">Dashboard</Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
+            <Navbar.Text>Signed in as: {this.state.user} </Navbar.Text>
             <Navbar.Text>
-              Signed in as: <a href="#login">{this.state.user}</a>
+              <a href="#login">Switch user</a>
             </Navbar.Text>
           </Navbar.Collapse>
         </Navbar>
@@ -56,7 +57,6 @@ class App extends Component {
             <Route path="/signup" component={SignupPage} />
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
-            <Route path="/mentee_onboarding" component={MenteeOnboarding} />
             <Route path="/mentee_onboarding" component={MenteeOnboarding} />
             <Route path="/admin" component={AdminPage} />
           </div>
