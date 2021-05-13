@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Button } from "react-bootstrap";
 import axios from "axios";
+import { JsonToTable } from "react-json-to-table";
 
 export default class AdminPage extends Component {
   state = {
@@ -50,7 +51,13 @@ export default class AdminPage extends Component {
     return (
       <Container>
         <h1>This is the admin page</h1>
-        <p>Here are the families {JSON.stringify(this.state.families)}</p>
+        <p>Here are the families</p>
+        {this.state.families.map((family) => (
+          <div>
+            <b/>
+            <JsonToTable json={family} />
+          </div>
+        ))}
         <Button variant="outline-secondary" onClick={this.onSubmit}>
           Run pairings
         </Button>{" "}
