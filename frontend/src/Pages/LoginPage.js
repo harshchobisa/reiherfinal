@@ -65,7 +65,7 @@ export default class LoginPage extends Component {
           </Form.Group>
           <Col>
             <Row>
-              <NavLink to="#/home/" onClick={this.onSubmit}>
+              <NavLink to="/home/" onClick={this.onSubmit}>
                 Submit
               </NavLink>
             </Row>
