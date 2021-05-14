@@ -31,4 +31,7 @@ urlpatterns = [
     path('getAllFamilies/', views.get_all_families),
     path('hasCompletedProfile/', views.has_completed_profile),
     path('isMentor/', views.is_mentor),
+    path('logout/', views.logout),
+    path('getCurrentUser/', views.get_current_user),
+
 ]

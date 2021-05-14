@@ -30,7 +30,7 @@ export default class LoginPage extends Component {
         if (response.status === 200) {
           console.log("redirect");
         }
-        this.props.handler(this.state.email);
+        // this.props.handler(this.state.email);
       })
       .catch(function (error) {
         console.log(error);
@@ -65,7 +65,7 @@ export default class LoginPage extends Component {
           </Form.Group>
           <Col>
             <Row>
-              <NavLink to="#/home/" onClick={this.onSubmit}>
+              <NavLink to="/home/" onClick={this.onSubmit}>
                 Submit
               </NavLink>
             </Row>

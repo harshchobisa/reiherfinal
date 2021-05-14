@@ -12,6 +12,7 @@ import AdminPage from "./Pages/AdminPage";
 import "./App.css";
 import { HashRouter, Route } from "react-router-dom";
 import { Nav, Navbar, Container } from "react-bootstrap";
+import axios from "axios";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -19,15 +20,40 @@ class App extends Component {
   state = {
     user: "",
   };
-  constructor(props) {
-    super(props);
-    this.handler = this.handler.bind(this);
-  }
-  handler(username) {
-    console.log(`in handler ${username}`);
 
-    this.setState({ user: username });
+  componentDidMount() {
+    axios({
+      method: "post",
+      url: "//localhost:8000/getCurrentUser/",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      withCredentials: true,
+    })
+      .then((response) => {
+        this.setState({ user: response.data });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
+
+  onSubmit = () => {
+    axios({
+      method: "post",
+      url: "//localhost:8000/logout/",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      withCredentials: true,
+    })
+      .then((response) => {
+        console.log(response.status);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   render() {
     return (
@@ -41,8 +67,8 @@ class App extends Component {
           </Nav>
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>Signed in as: {this.state.user} </Navbar.Text>
-            <Navbar.Text>
-              <a href="#login">Switch user</a>
+            <Navbar.Text onClick={this.onSubmit}>
+              <a href="#login">Logout</a>
             </Navbar.Text>
           </Navbar.Collapse>
         </Navbar>
@@ -50,10 +76,12 @@ class App extends Component {
           <div className="App">
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={HomePage} />
-            <Route
+            <Route path="/login" component={LoginPage} />
+
+            {/* <Route
               path="/login"
               render={() => <LoginPage handler={this.handler} />}
-            />
+            /> */}
             <Route path="/signup" component={SignupPage} />
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
