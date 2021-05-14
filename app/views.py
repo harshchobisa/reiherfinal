@@ -19,6 +19,10 @@ from matching.main import *
 
 from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings
 
+@csrf_exempt
+def index(request): 
+    return render(request, "build/index.html")
+
 @csrf_exempt #NEED TO FIGURE OUT WHAT THIS IS!
 def create_user(request):
     #only accept post requests
@@ -58,6 +62,12 @@ def create_user(request):
     user = Users(email=email, password=hashedPassword, role=role)
     try:
         user.save()
+        #create authentication token for session
+        token = createAuthToken(email)
+
+        request.session['email'] = email
+        request.session['token'] = str(token)
+        request.session.set_expiry(3600) #session expires in 3600 seconds = 1 hour
         return HttpResponse("user succesfully created", status=201)
     except:
         return HttpResponse("error saving user", status=401)
@@ -563,6 +573,7 @@ def logout(request):
 
     try:
         del request.session['email']
+        del request.session['token']
         return HttpResponse("success", status=200)
     except:
         return HttpResponse("error", status=404)
