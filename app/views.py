@@ -53,6 +53,12 @@ def create_user(request):
     user = Users(email=email, password=hashedPassword, role=role)
     try:
         user.save()
+        #create authentication token for session
+        token = createAuthToken(email)
+
+        request.session['email'] = email
+        request.session['token'] = str(token)
+        request.session.set_expiry(3600) #session expires in 3600 seconds = 1 hour
         return HttpResponse("user succesfully created", status=201)
     except:
         return HttpResponse("error saving user", status=401)
