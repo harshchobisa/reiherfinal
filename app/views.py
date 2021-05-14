@@ -21,7 +21,7 @@ from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings
 
 @csrf_exempt
 def index(request): 
-    return render(request, "build/index.html")
+    return render(request, "index.html")
 
 @csrf_exempt #NEED TO FIGURE OUT WHAT THIS IS!
 def create_user(request):
