@@ -13,7 +13,7 @@ export default class LoginPage extends Component {
   componentDidMount() {
     axios({
       method: "post",
-      url: "//localhost/getCurrentUser/",
+      url: "getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -36,7 +36,7 @@ export default class LoginPage extends Component {
     });
     var config = {
       method: "post",
-      url: "//localhost/login/",
+      url: "login/",
       headers: {
         "Content-Type": "text/plain",
       },

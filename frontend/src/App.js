@@ -35,7 +35,7 @@ class App extends Component {
   componentDidMount() {
     axios({
       method: "post",
-      url: "//localhost:8000/getCurrentUser/",
+      url: "getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -52,7 +52,7 @@ class App extends Component {
   onSubmit = () => {
     axios({
       method: "post",
-      url: "//localhost:8000/logout/",
+      url: "logout/",
       headers: {
         "Content-Type": "text/plain",
       },

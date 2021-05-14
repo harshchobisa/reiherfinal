@@ -21,7 +21,7 @@ export default class MentorOnboarding extends Component {
   onSubmit = () => {
     var config = {
       method: "post",
-      url: "//localhost/createMentor/",
+      url: "createMentor/",
       headers: {
         "Content-Type": "text/plain",
       },

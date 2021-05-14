@@ -14,7 +14,7 @@ export default class HomePage extends Component {
   componentDidMount() {
     axios({
       method: "post",
-      url: "//localhost/getFamily/",
+      url: "getFamily/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -29,7 +29,7 @@ export default class HomePage extends Component {
 
     axios({
       method: "post",
-      url: "//localhost/hasCompletedProfile/",
+      url: "hasCompletedProfile/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -48,7 +48,7 @@ export default class HomePage extends Component {
 
     axios({
       method: "post",
-      url: "//localhost/isMentor/",
+      url: "isMentor/",
       headers: {
         "Content-Type": "text/plain",
       },

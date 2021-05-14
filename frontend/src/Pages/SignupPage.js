@@ -15,7 +15,7 @@ export default class SignupPage extends Component {
   componentDidMount() {
     axios({
       method: "post",
-      url: "//localhost/getCurrentUser/",
+      url: "getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -50,7 +50,7 @@ export default class SignupPage extends Component {
     });
     var config = {
       method: "post",
-      url: "//localhost/createUser/",
+      url: "createUser/",
       headers: {
         "Content-Type": "text/plain",
       },

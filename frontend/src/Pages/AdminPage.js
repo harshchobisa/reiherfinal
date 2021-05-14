@@ -11,7 +11,7 @@ export default class AdminPage extends Component {
   componentDidMount() {
     var config = {
       method: "post",
-      url: "//localhost/getAllFamilies/",
+      url: "getAllFamilies/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -31,7 +31,7 @@ export default class AdminPage extends Component {
   runPairings = () => {
     var config = {
       method: "post",
-      url: "//localhost/createFamilies/",
+      url: "createFamilies/",
       headers: {
         "Content-Type": "text/plain",
       },
@@ -53,7 +53,7 @@ export default class AdminPage extends Component {
   addData = () => {
     var config = {
       method: "post",
-      url: "//localhost/populateUsers/",
+      url: "populateUsers/",
       headers: {
         "Content-Type": "text/plain",
       },
