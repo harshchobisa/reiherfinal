@@ -7,7 +7,7 @@ export default class SignupPage extends Component {
   state = {
     email: "",
     password: "",
-    role: "",
+    role: "mentor",
     submitted: false,
   };
 
@@ -71,6 +71,7 @@ export default class SignupPage extends Component {
               custom
               onChange={(e) => this.setState({ role: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>mentor</option>
               <option>mentee</option>
             </Form.Control>

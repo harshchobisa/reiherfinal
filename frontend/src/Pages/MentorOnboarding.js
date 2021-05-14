@@ -11,11 +11,11 @@ export default class MentorOnboarding extends Component {
     gender: "Male",
     major: "Computer Science",
     mentorType: "Academic",
-    firstActivity: "dummy",
-    secondActivity: "dummy",
-    thirdActivity: "dummy",
-    fourthActivity: "dummy",
-    fifthActivity: "dummy",
+    firstActivity: "Art/Theater",
+    secondActivity: "Hiking/Outdoors",
+    thirdActivity: "Community Service",
+    fourthActivity: "Gym",
+    fifthActivity: "Sports",
   };
 
   onSubmit = () => {
@@ -36,6 +36,9 @@ export default class MentorOnboarding extends Component {
         console.log(JSON.stringify(response.data));
         if (response.status === 200) {
           console.log("redirect");
+        }
+        if (response.status !== 201) {
+          alert("API error");
         }
       })
       .catch(function (error) {
@@ -77,6 +80,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ year: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>2022</option>
               <option>2023</option>
               <option>2024</option>
@@ -90,6 +94,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ gender: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Male</option>
               <option>Female</option>
             </Form.Control>
@@ -101,6 +106,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ major: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Computer Science</option>
               <option>Computer Science and Engineering</option>
               <option>Computer Engineering</option>
@@ -121,6 +127,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ mentorType: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Academic</option>
               <option>Social</option>
             </Form.Control>
@@ -132,6 +139,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ firstActivity: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Art/Theater</option>
               <option>Hiking/Outdoors</option>
               <option>Community Service</option>
@@ -141,7 +149,6 @@ export default class MentorOnboarding extends Component {
               <option>Video Games</option>
               <option>Watching TV/Movies</option>
               <option>Music</option>
-              
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -149,8 +156,11 @@ export default class MentorOnboarding extends Component {
             <Form.Control
               as="select"
               custom
-              onChange={(e) => this.setState({ secondActivity: e.target.value })}
+              onChange={(e) =>
+                this.setState({ secondActivity: e.target.value })
+              }
             >
+              <option value="">Choose...</option>
               <option>Art/Theater</option>
               <option>Hiking/Outdoors</option>
               <option>Community Service</option>
@@ -161,7 +171,7 @@ export default class MentorOnboarding extends Component {
               <option>Watching TV/Movies</option>
               <option>Music</option>
             </Form.Control>
-          </Form.Group>          
+          </Form.Group>
           <Form.Group controlId="ControlInput1">
             <Form.Label>Activity Three</Form.Label>
             <Form.Control
@@ -169,6 +179,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ thirdActivity: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Art/Theater</option>
               <option>Hiking/Outdoors</option>
               <option>Community Service</option>
@@ -185,8 +196,11 @@ export default class MentorOnboarding extends Component {
             <Form.Control
               as="select"
               custom
-              onChange={(e) => this.setState({ fourthActivity: e.target.value })}
+              onChange={(e) =>
+                this.setState({ fourthActivity: e.target.value })
+              }
             >
+              <option value="">Choose...</option>
               <option>Art/Theater</option>
               <option>Hiking/Outdoors</option>
               <option>Community Service</option>
@@ -205,6 +219,7 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ fifthActivity: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Art/Theater</option>
               <option>Hiking/Outdoors</option>
               <option>Community Service</option>
@@ -215,7 +230,7 @@ export default class MentorOnboarding extends Component {
               <option>Watching TV/Movies</option>
               <option>Music</option>
             </Form.Control>
-          </Form.Group> 
+          </Form.Group>
           <NavLink to="/home/" onClick={this.onSubmit}>
             Submit
           </NavLink>
