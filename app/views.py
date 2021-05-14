@@ -465,6 +465,7 @@ def logout(request):
 
     try:
         del request.session['email']
+        del request.session['token']
         return HttpResponse("success", status=200)
     except:
         return HttpResponse("error", status=404)
