@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 export default class SignupPage extends Component {
   state = {
@@ -9,9 +9,40 @@ export default class SignupPage extends Component {
     password: "",
     role: "mentor",
     submitted: false,
+    loggedIn: false,
   };
 
+  componentDidMount() {
+    axios({
+      method: "post",
+      url: "//localhost:8000/getCurrentUser/",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      withCredentials: true,
+    })
+      .then((response) => {
+        if (response.data !== "") {
+          this.setState({ loggedIn: true });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  isValid = () => {
+    var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    if (this.state.password.match(passw)) {
+      return true;
+    }
+    alert("Password not good enough");
+    return false;
+  };
   onSubmit = () => {
+    if (!this.isValid()) {
+      return;
+    }
     var data = JSON.stringify({
       email: this.state.email,
       password: this.state.password,
@@ -36,9 +67,13 @@ export default class SignupPage extends Component {
       .catch(function (error) {
         console.log(error);
       });
+    return <Redirect to="/home" />;
   };
 
   render() {
+    if (this.state.loggedIn) {
+      return <Redirect to="/home" />;
+    }
     return (
       <Container>
         <h1>Signup Page</h1>
@@ -63,6 +98,10 @@ export default class SignupPage extends Component {
               value={this.state.password}
               onChange={(e) => this.setState({ password: e.target.value })}
             />
+            <Form.Text className="text-muted">
+              Password must be between 6 to 20 characters which contain at least
+              one numeric digit, one uppercase and one lowercase letter.
+            </Form.Text>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
             <Form.Label>Role</Form.Label>
@@ -78,9 +117,7 @@ export default class SignupPage extends Component {
           </Form.Group>
           <Col>
             <Row>
-              <NavLink to="/home/" onClick={this.onSubmit}>
-                Submit
-              </NavLink>
+              <Button onClick={this.onSubmit}>Submit</Button>
             </Row>
             <Row>
               <Button href="#/login/" variant="outline-secondary">
