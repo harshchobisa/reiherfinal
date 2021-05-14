@@ -11,11 +11,11 @@ export default class MenteeOnboarding extends Component {
     gender: "Male",
     major: "Computer Science",
     menteeType: "Academic",
-    firstActivity: "dummy",
-    secondActivity: "dummy",
-    thirdActivity: "dummy",
-    fourthActivity: "dummy",
-    fifthActivity: "dummy",
+    firstActivity: "Art/Theater",
+    secondActivity: "Hiking/Outdoors",
+    thirdActivity: "Community Service",
+    fourthActivity: "Gym",
+    fifthActivity: "Sports",
   };
 
   onSubmit = () => {
@@ -36,6 +36,9 @@ export default class MenteeOnboarding extends Component {
         console.log(JSON.stringify(response.data));
         if (response.status === 200) {
           console.log("redirect");
+        }
+        if (response.status !== 201) {
+          alert("API error");
         }
       })
       .catch(function (error) {
@@ -77,6 +80,7 @@ export default class MenteeOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ year: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>2022</option>
               <option>2023</option>
               <option>2024</option>
@@ -90,6 +94,7 @@ export default class MenteeOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ gender: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Male</option>
               <option>Female</option>
             </Form.Control>
@@ -101,6 +106,7 @@ export default class MenteeOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ major: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Computer Science</option>
               <option>Computer Science and Engineering</option>
               <option>Computer Engineering</option>
@@ -111,15 +117,17 @@ export default class MenteeOnboarding extends Component {
               <option>Civil Engineering</option>
               <option>Chemical Engineering</option>
               <option>Materials Engineering</option>
+              <option>Undeclared Engineering</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
-            <Form.Label>Mentor Type</Form.Label>
+            <Form.Label>Mentee Type</Form.Label>
             <Form.Control
               as="select"
               custom
               onChange={(e) => this.setState({ menteeType: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>Academic</option>
               <option>Social</option>
             </Form.Control>
@@ -131,11 +139,16 @@ export default class MenteeOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ firstActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option value="">Choose...</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -143,15 +156,22 @@ export default class MenteeOnboarding extends Component {
             <Form.Control
               as="select"
               custom
-              onChange={(e) => this.setState({ secondActivity: e.target.value })}
+              onChange={(e) =>
+                this.setState({ secondActivity: e.target.value })
+              }
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option value="">Choose...</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
-          </Form.Group>          
+          </Form.Group>
           <Form.Group controlId="ControlInput1">
             <Form.Label>Activity Three</Form.Label>
             <Form.Control
@@ -159,11 +179,16 @@ export default class MenteeOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ thirdActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option value="">Choose...</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -171,13 +196,20 @@ export default class MenteeOnboarding extends Component {
             <Form.Control
               as="select"
               custom
-              onChange={(e) => this.setState({ fourthActivity: e.target.value })}
+              onChange={(e) =>
+                this.setState({ fourthActivity: e.target.value })
+              }
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option value="">Choose...</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -187,13 +219,18 @@ export default class MenteeOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ fifthActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option value="">Choose...</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
-          </Form.Group> 
+          </Form.Group>
           <NavLink to="/home/" onClick={this.onSubmit}>
             Submit
           </NavLink>

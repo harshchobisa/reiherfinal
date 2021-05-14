@@ -4,12 +4,14 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import numpy as np
 import pandas as pd
+import random
 
 from secrets import token_bytes
 import hmac
 import hashlib
 import time
 from matching.main import *
+from matching.constants import *
 # from matching.constants import *
 # from matching.mentor import *
 # from matching.mentee import *
@@ -470,18 +472,21 @@ def create_families(request):
     mentees_array = convert_json(mentees, False)
 
     familyToMentors, mentorEmailToMenteesEmails = matching_algorithm(mentors_array, mentees_array)
-        
+    mentee_emails = mentees_array['email'].to_list()
+    paired_emails = []
+    menteeCount = 0    
     for family_id in familyToMentors.keys():
         for mentor in familyToMentors[family_id]:
             mentor_email = mentor
-            print(mentor_email)
             pair = Pairings(email=mentor, familyid=family_id)
             try:
                 pair.save()
             except:
                 return HttpResponse("error saving pairing", status=401)
 
+
             for mentee in mentorEmailToMenteesEmails[mentor_email]:
+                paired_emails.append(mentee)
                 pair = Pairings(email=mentee, familyid=family_id)
                 try:
                     pair.save()
@@ -489,6 +494,16 @@ def create_families(request):
                     return HttpResponse("error saving pairing", status=401)
         print()
     
+    missing_emails = list(set(mentee_emails) - set(paired_emails))
+    last_family = len(familyToMentors)-1
+    for mentee in missing_emails:
+        rand_family = random.randint(0, last_family)
+        pair = Pairings(email=mentee, familyid=family_id)
+        try:
+            pair.save()
+        except:
+            return HttpResponse("error saving pairing", status=401)
+
     return HttpResponse("successfully created all families", status=200)
 
 
@@ -594,42 +609,151 @@ def get_current_user(request):
     except:
         return HttpResponse("unable to get current user", status=404)
 
-# def populate_users(num_mentors, num_mentees):
-#     for i in range(num_mentors):
-#         string_i = str(i)
-#         email_ = "mentor_{i}@gmail.com".format(i=string_i)
-#         password_ = string_i
-#         key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
-#         passwordbytes = bytes(password_, 'utf-8')
-#         keybytes = bytes(key, 'utf-8')
+def create_mentors(num_mentors):
+    for i in range(num_mentors):
+        string_i = str(i)
+        email_ = "mentor_{i}@gmail.com".format(i=string_i)
+        firstName_ = "mentor"
+        lastName_ = string_i
+        rand_gender = random.randint(0,1)
+        if(rand_gender == 0):
+            gender_ = "Female"
+        else:
+            gender_ = "Male"
+        rand_major = random.randint(0,10)
+        major_ = categoryChoices['Majors'][rand_major]
+        rand_type = random.randint(0,1)
+        if(rand_type == 0):
+            mentorType_ = "Academic"
+        else:
+            mentorType_ = "Social"
+        year_list = ["2021", "2022", "2023"]
+        rand_year = random.randint(0,2)
+        year_ = year_list[rand_year]
+        activities = categoryChoices['Activities']
+        rand_activities = random.sample(range(0, 9), 5)
+        firstActivity_ = activities[rand_activities[0]]
+        secondActivity_ = activities[rand_activities[1]]
+        thirdActivity_ = activities[rand_activities[2]]
+        fourthActivity_ = activities[rand_activities[3]]
+        fifthActivity_ = activities[rand_activities[4]]
+        try:
+            mentors = Mentors(email=email_, firstName=firstName_, lastName=lastName_, gender=gender_, major=major_, year=year_, firstActivity=firstActivity_, secondActivity=secondActivity_, thirdActivity=thirdActivity_, fourthActivity=fourthActivity_, fifthActivity=fifthActivity_, mentorType=mentorType_)
+        except Exception as e:
+            print(e)
+        try:
+            mentors.save()
+        except Exception:
+            return HttpResponse("unable to save mentors", 401)
+        # print(major_)
+    return HttpResponse("created mentors", 200)
 
-#         h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
-#         hashedPassword = str(h.hexdigest())
-#         role_ = "mentor"
+def create_mentees(num_mentees):
+    for i in range(num_mentees):
+        string_i = str(i)
+        email_ = "mentee_{i}@gmail.com".format(i=string_i)
+        firstName_ = "mentee"
+        lastName_ = string_i
+        rand_gender = random.randint(0,1)
+        if(rand_gender == 0):
+            gender_ = "Female"
+        else:
+            gender_ = "Male"
+        rand_major = random.randint(0,10)
+        major_ = categoryChoices['Majors'][rand_major]
+        rand_type = random.randint(0,1)
+        if(rand_type == 0):
+            menteeType_ = "Academic"
+        else:
+            menteeType_ = "Social"
+        year_list = ["2023", "2024"]
+        rand_year = random.randint(0,1)
+        year_ = year_list[rand_year]
+        activities = categoryChoices['Activities']
+        rand_activities = random.sample(range(0, 9), 5)
+        firstActivity_ = activities[rand_activities[0]]
+        secondActivity_ = activities[rand_activities[1]]
+        thirdActivity_ = activities[rand_activities[2]]
+        fourthActivity_ = activities[rand_activities[3]]
+        fifthActivity_ = activities[rand_activities[4]]
+        try:
+            mentees = Mentees(email=email_, firstName=firstName_, lastName=lastName_, gender=gender_, major=major_, year=year_, firstActivity=firstActivity_, secondActivity=secondActivity_, thirdActivity=thirdActivity_, fourthActivity=fourthActivity_, fifthActivity=fifthActivity_, menteeType=menteeType_)
+        except Exception as e:
+            print(e)
+        try:
+            mentees.save()
+        except Exception:
+            return HttpResponse("unable to save mentees", 401)
+        # print(major_)
+    return HttpResponse("created mentors and mentees", 200)
+        
 
-#         user = Users(email=email_, password=hashedPassword, role=role_)
-#         try:
-#             user.save()
-#         except:
-#             return HttpResponse("error saving user", status=401)
-#     for i in range(num_mentees):
-#         print(i)
-#         string_i = str(i)
-#         username_ = "mentee_{i}@gmail.com".format(i=string_i)
-#         password_ = string_i
-#         key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
-#         passwordbytes = bytes(password_, 'utf-8')
-#         keybytes = bytes(key, 'utf-8')
+        
 
-#         h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
-#         hashedPassword = str(h.hexdigest())
-#         role_ = "mentee"
-#         user = Users(email=email_, password=hashedPassword, role=role_)
-#         try:
-#             user.save()
-#         except:
-#             return HttpResponse("error saving user", status=401)
-#     return HttpResponse("succcesffuly did it", status=200)
+@csrf_exempt
+def populate_users(request):
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    #make sure this api is only accessible to admins
+    try:
+        user = Users.objects.get(email=request.session["email"])
+        if user.role != "admin":
+            return HttpResponse("not authorized--must be admin to see all families", status=401)
+    
+
+    except Exception:
+        return HttpResponse("unable to find user", status=404)
+
+    try:
+        payload = json.loads(request.body)
+        num_mentors = payload["num_mentors"]
+        num_mentees = payload["num_mentees"]
+    except:
+        return HttpResponse("missing/blank email, password, or role", status=401)
+
+    for i in range(num_mentors):
+        string_i = str(i)
+        email_ = "mentor_{i}@gmail.com".format(i=string_i)
+        password_ = string_i
+        key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+        passwordbytes = bytes(password_, 'utf-8')
+        keybytes = bytes(key, 'utf-8')
+
+        h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+        hashedPassword = str(h.hexdigest())
+        role_ = "mentor"
+
+        user = Users(email=email_, password=hashedPassword, role=role_)
+        try:
+            user.save()
+        except:
+            return HttpResponse("error saving user", status=401)
+    for i in range(num_mentees):
+        # print(i)
+        string_i = str(i)
+        email_ = "mentee_{i}@gmail.com".format(i=string_i)
+        password_ = string_i
+        key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+        passwordbytes = bytes(password_, 'utf-8')
+        keybytes = bytes(key, 'utf-8')
+
+        h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+        hashedPassword = str(h.hexdigest())
+        role_ = "mentee"
+        user = Users(email=email_, password=hashedPassword, role=role_)
+        try:
+            user.save()
+        except:
+            return HttpResponse("error saving user", status=401)
+    create_mentors(num_mentors)
+    return create_mentees(num_mentees)
+    # return HttpResponse("succcesffuly did it", status=200)
+
 
 
 
