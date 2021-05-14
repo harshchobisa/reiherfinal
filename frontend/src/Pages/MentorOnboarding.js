@@ -111,6 +111,7 @@ export default class MentorOnboarding extends Component {
               <option>Civil Engineering</option>
               <option>Chemical Engineering</option>
               <option>Materials Engineering</option>
+              <option>Undeclared Engineering</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -131,11 +132,16 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ firstActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
+              
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -145,11 +151,15 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ secondActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group>          
           <Form.Group controlId="ControlInput1">
@@ -159,11 +169,15 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ thirdActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -173,11 +187,15 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ fourthActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="ControlInput1">
@@ -187,11 +205,15 @@ export default class MentorOnboarding extends Component {
               custom
               onChange={(e) => this.setState({ fifthActivity: e.target.value })}
             >
-              <option>Temp1</option>
-              <option>Temp2</option>
-              <option>Temp3</option>
-              <option>Temp4</option>
-              <option>Temp5</option>
+              <option>Art/Theater</option>
+              <option>Hiking/Outdoors</option>
+              <option>Community Service</option>
+              <option>Gym</option>
+              <option>Sports</option>
+              <option>Greek Life</option>
+              <option>Video Games</option>
+              <option>Watching TV/Movies</option>
+              <option>Music</option>
             </Form.Control>
           </Form.Group> 
           <NavLink to="/home/" onClick={this.onSubmit}>

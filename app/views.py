@@ -2,11 +2,20 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import numpy as np
+import pandas as pd
 
 from secrets import token_bytes
 import hmac
 import hashlib
 import time
+from matching.main import *
+# from matching.constants import *
+# from matching.mentor import *
+# from matching.mentee import *
+# from matching.stable_match import *
+# from sklearn.metrics.pairwise import euclidean_distances
+# from matching.export import *
 
 from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings
 
@@ -68,13 +77,24 @@ def create_mentor(request):
     requiredFields = ['firstName', 'lastName', 'year', 
             'gender', 'major', 'mentorType', 'firstActivity', 'secondActivity', 'thirdActivity',
             'fourthActivity', 'fifthActivity']
+    
+    activitiesField = ['firstActivity', 'secondActivity', 'thirdActivity',
+            'fourthActivity', 'fifthActivity']
+
     try:
         payload = json.loads(request.body)
         for field in requiredFields:
             if payload[field] == "":
-                return HttpResponse("missing required fields", status=401)
+                print(field)
+                return HttpResponse("missing required fields lol", status=401)
+        # activities_set = set()
+        # for activity in activitiesField:
+        #     activities_set.add(payload[activity])
+        # if activities_set.size() != 5:
+        #     return HttpResponse("invalid form response--give unique form responses", status=401)
+
     except:
-        return HttpResponse("missing required fields", status=401)
+        return HttpResponse("missing required fields hi", status=401)
 
     #make sure this api is only accessible to mentors
     try:
@@ -280,6 +300,16 @@ def get_all_families(request):
 
     return JsonResponse(allFamilies, safe=False)
 
+def getFamily(familyid):
+    try:
+        family = Pairings.objects.filter(familyid=familyid)
+        familyUsers = []
+        for member in family:
+            familyUsers.append(getUserInfo(member.email))
+    except Exception:
+        return None
+
+    return familyUsers;
 
 
 @csrf_exempt
@@ -316,7 +346,7 @@ def get_user_family(request):
 
 
 #get a single user's info, given the user's email
-def getUserInfo(email):
+def getUserInfo(email, full=False):
     
     #get the user's role so we know which table to look in
     try:
@@ -342,20 +372,48 @@ def getUserInfo(email):
     info['major'] = user.major
     info['role'] = role
 
+    ##added a parameter to get all the values in json format
+    if(full == True):
+        info['gender'] = user.gender
+        info['firstActivity'] = user.firstActivity
+        info['secondActivity'] = user.secondActivity
+        info['thirdActivity'] = user.thirdActivity
+        info['fourthActivity'] = user.fourthActivity
+        info['fifthActivity'] = user.fifthActivity
+        if(role == "mentor"):
+            info['mentorType'] = user.mentorType
+        
+        else:
+            info['menteeType'] = user.menteeType
     return info
 
-#gets a family given the familyid
-def getFamily(familyid):
-    try:
-        family = Pairings.objects.filter(familyid=familyid)
-        familyUsers = []
-        for member in family:
-            familyUsers.append(getUserInfo(member.email))
-    except Exception:
-        return None
-
-    return familyUsers;
-
+def convert_json(json_obj, mentor=True):
+    return_array = []
+    i = 0
+    for elem in json_obj:
+        temp_array = []
+        if elem is not None:
+            temp_array.append(elem.get('email', ''))
+            temp_array.append(elem.get('firstName', ''))
+            temp_array.append(elem.get('lastName', ''))
+            temp_array.append(elem.get('year', ''))
+            temp_array.append(elem.get('gender', ''))
+            temp_array.append(elem.get('major', ''))
+            if(mentor == True):
+                temp_array.append(elem.get('mentorType', ''))
+            else:
+                temp_array.append(elem.get('menteeType', ''))
+            temp_array.append(elem.get('firstActivity', ''))
+            temp_array.append(elem.get('secondActivity', ''))
+            temp_array.append(elem.get('thirdActivity', ''))
+            temp_array.append(elem.get('fourthActivity', ''))
+            temp_array.append(elem.get('fifthActivity', ''))
+            return_array.append(temp_array.copy())
+    if(mentor == True):
+        matrix = pd.DataFrame(data=return_array, columns=['email', 'firstName', 'lastName', 'year', 'gender', 'major', 'mentorType', 'firstActivity', 'secondActivity', 'thirdActivity', 'fourthActivity', 'fifthActivity'])
+    else:
+        matrix = pd.DataFrame(data=return_array, columns=['email', 'firstName', 'lastName', 'year', 'gender', 'major', 'menteeType', 'firstActivity', 'secondActivity', 'thirdActivity', 'fourthActivity', 'fifthActivity'])
+    return matrix
 
 @csrf_exempt
 def create_families(request):
@@ -375,9 +433,53 @@ def create_families(request):
 
     except Exception:
         return HttpResponse("unable to find user", status=404)
+    
+    # return populate_users(20, 79)
+    # return HttpResponse("made users", status=200)
+    try:
+        mentor_objs = Mentors.objects.all()
+    except Exception:
+        print(Exception)
+        return HttpResponse("error getting mentor objects", status=404)
+    
+    mentors = []
+    for mentor in mentor_objs:
+        mentors.append(getUserInfo(mentor.email, True))
+    
+    try:
+        mentee_objs = Mentees.objects.all()
+    except Exception:
+        print(Exception)
+        return HttpResponse("error getting mentee objects", status=404)
+    
+    mentees = []
+    for mentee in mentee_objs:
+        mentees.append(getUserInfo(mentee.email, True))
 
+    mentors_array = convert_json(mentors)
+    mentees_array = convert_json(mentees, False)
 
-    return HttpResponse("families succesfully created", status=200)
+    familyToMentors, mentorEmailToMenteesEmails = matching_algorithm(mentors_array, mentees_array)
+        
+    for family_id in familyToMentors.keys():
+        for mentor in familyToMentors[family_id]:
+            mentor_email = mentor
+            print(mentor_email)
+            pair = Pairings(email=mentor, familyid=family_id)
+            try:
+                pair.save()
+            except:
+                return HttpResponse("error saving pairing", status=401)
+
+            for mentee in mentorEmailToMenteesEmails[mentor_email]:
+                pair = Pairings(email=mentee, familyid=family_id)
+                try:
+                    pair.save()
+                except:
+                    return HttpResponse("error saving pairing", status=401)
+        print()
+    
+    return HttpResponse("successfully created all families", status=200)
 
 
 @csrf_exempt
@@ -480,4 +582,43 @@ def get_current_user(request):
         return HttpResponse(email, status=200)
     except:
         return HttpResponse("unable to get current user", status=404)
+
+# def populate_users(num_mentors, num_mentees):
+#     for i in range(num_mentors):
+#         string_i = str(i)
+#         email_ = "mentor_{i}@gmail.com".format(i=string_i)
+#         password_ = string_i
+#         key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+#         passwordbytes = bytes(password_, 'utf-8')
+#         keybytes = bytes(key, 'utf-8')
+
+#         h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+#         hashedPassword = str(h.hexdigest())
+#         role_ = "mentor"
+
+#         user = Users(email=email_, password=hashedPassword, role=role_)
+#         try:
+#             user.save()
+#         except:
+#             return HttpResponse("error saving user", status=401)
+#     for i in range(num_mentees):
+#         print(i)
+#         string_i = str(i)
+#         username_ = "mentee_{i}@gmail.com".format(i=string_i)
+#         password_ = string_i
+#         key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+#         passwordbytes = bytes(password_, 'utf-8')
+#         keybytes = bytes(key, 'utf-8')
+
+#         h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+#         hashedPassword = str(h.hexdigest())
+#         role_ = "mentee"
+#         user = Users(email=email_, password=hashedPassword, role=role_)
+#         try:
+#             user.save()
+#         except:
+#             return HttpResponse("error saving user", status=401)
+#     return HttpResponse("succcesffuly did it", status=200)
+
+
 
