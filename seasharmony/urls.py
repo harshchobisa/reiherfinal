@@ -33,5 +33,6 @@ urlpatterns = [
     path('isMentor/', views.is_mentor),
     path('logout/', views.logout),
     path('getCurrentUser/', views.get_current_user),
+    path('populateUsers/', views.populate_users)
 
 ]
