@@ -11,7 +11,7 @@ export default class LandingPage extends Component {
   componentDidMount() {
     axios({
       method: "post",
-      url: "//localhost:8000/getCurrentUser/",
+      url: "//localhost/getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
       },
