@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-nf)fl17eo7qkqg+06^acg+=dp3$map$-#!p8eky^7(u41%x1*l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'seasharmony-app-env.eba-3jpwws2e.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django-env.eba-3jpwws2e.us-west-2.elasticbeanstalk.com']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
