@@ -21,6 +21,15 @@ class App extends Component {
     user: "",
   };
 
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick = () => {
+    window.location.reload();
+  };
+
   componentDidMount() {
     axios({
       method: "post",
@@ -56,6 +65,15 @@ class App extends Component {
   };
 
   render() {
+    function TryUsername(props) {
+      const user = props.user;
+
+      if (user !== "") {
+        return <Navbar.Text>Signed in as: {user} </Navbar.Text>;
+      } else {
+        return <div></div>;
+      }
+    }
     return (
       <Container>
         <Navbar bg="primary" variant="dark">
@@ -66,7 +84,7 @@ class App extends Component {
             <Nav.Link href="#home">Dashboard</Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>Signed in as: {this.state.user} </Navbar.Text>
+            <TryUsername user={this.state.user}></TryUsername>
             <Navbar.Text onClick={this.onSubmit}>
               <a href="#login">Logout</a>
             </Navbar.Text>
@@ -76,12 +94,12 @@ class App extends Component {
           <div className="App">
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={HomePage} />
-            <Route path="/login" component={LoginPage} />
+            {/* <Route path="/login" component={LoginPage} /> */}
 
-            {/* <Route
+            <Route
               path="/login"
-              render={() => <LoginPage handler={this.handler} />}
-            /> */}
+              render={() => <LoginPage handler={this.handleClick} />}
+            />
             <Route path="/signup" component={SignupPage} />
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />

@@ -30,7 +30,7 @@ export default class LoginPage extends Component {
         if (response.status === 200) {
           console.log("redirect");
         }
-        // this.props.handler(this.state.email);
+        this.props.handler();
       })
       .catch(function (error) {
         console.log(error);
