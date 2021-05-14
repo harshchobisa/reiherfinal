@@ -30,9 +30,9 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'env-9.eba-3jpwws2e.us-west-2.elastic
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000', 'http://localhost:8000', 'http://127.0.0.1:8000'
-)
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000', 'http://localhost:8000', 'http://127.0.0.1:8000', '172.31.19.17'
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
