@@ -7,7 +7,7 @@ export default class SignupPage extends Component {
   state = {
     email: "",
     password: "",
-    role: "",
+    role: "mentor",
     submitted: false,
   };
 
@@ -16,7 +16,7 @@ export default class SignupPage extends Component {
       email: this.state.email,
       password: this.state.password,
       role: this.state.role,
-    });    
+    });
     var config = {
       method: "post",
       url: "//localhost:8000/createUser/",
@@ -24,12 +24,14 @@ export default class SignupPage extends Component {
         "Content-Type": "text/plain",
       },
       data: data,
+      withCredentials: true,
     };
 
     axios(config)
-      .then(function (response) {
+      .then((response) => {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
+        this.props.handler();
       })
       .catch(function (error) {
         console.log(error);
@@ -69,13 +71,14 @@ export default class SignupPage extends Component {
               custom
               onChange={(e) => this.setState({ role: e.target.value })}
             >
+              <option value="">Choose...</option>
               <option>mentor</option>
               <option>mentee</option>
             </Form.Control>
           </Form.Group>
           <Col>
             <Row>
-              <NavLink to="/login/" onClick={this.onSubmit}>
+              <NavLink to="/home/" onClick={this.onSubmit}>
                 Submit
               </NavLink>
             </Row>

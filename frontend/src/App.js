@@ -19,6 +19,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 class App extends Component {
   state = {
     user: "",
+    dummy: 0,
+  };
+
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick = () => {
+    this.setState({ dummy: this.state.dummy + 1 });
+    window.location.reload();
   };
 
   componentDidMount() {
@@ -49,6 +60,7 @@ class App extends Component {
     })
       .then((response) => {
         console.log(response.status);
+        this.setState({ user: "" });
       })
       .catch(function (error) {
         console.log(error);
@@ -56,6 +68,15 @@ class App extends Component {
   };
 
   render() {
+    function TryUsername(props) {
+      const user = props.user;
+
+      if (user !== "") {
+        return <Navbar.Text>Signed in as: {user} .</Navbar.Text>;
+      } else {
+        return <div></div>;
+      }
+    }
     return (
       <Container>
         <Navbar bg="primary" variant="dark">
@@ -66,7 +87,7 @@ class App extends Component {
             <Nav.Link href="#home">Dashboard</Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>Signed in as: {this.state.user} </Navbar.Text>
+            <TryUsername user={this.state.user}></TryUsername>
             <Navbar.Text onClick={this.onSubmit}>
               <a href="#login">Logout</a>
             </Navbar.Text>
@@ -76,13 +97,14 @@ class App extends Component {
           <div className="App">
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={HomePage} />
-            <Route path="/login" component={LoginPage} />
-
-            {/* <Route
+            <Route
               path="/login"
-              render={() => <LoginPage handler={this.handler} />}
-            /> */}
-            <Route path="/signup" component={SignupPage} />
+              render={() => <LoginPage handler={this.handleClick} />}
+            />
+            <Route
+              path="/signup"
+              render={() => <SignupPage handler={this.handleClick} />}
+            />
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
             <Route path="/mentee_onboarding" component={MenteeOnboarding} />

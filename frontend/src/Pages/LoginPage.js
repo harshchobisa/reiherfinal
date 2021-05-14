@@ -1,13 +1,34 @@
 import React, { Component } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { Redirect, NavLink } from "react-router-dom";
 
 export default class LoginPage extends Component {
   state = {
     email: "",
     password: "",
+    loggedIn: false,
   };
+
+  componentDidMount() {
+    axios({
+      method: "post",
+      url: "//localhost:8000/getCurrentUser/",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      withCredentials: true,
+    })
+      .then((response) => {
+        if (response.data !== "") {
+          this.setState({ loggedIn: true });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   onSubmit = () => {
     var data = JSON.stringify({
       email: this.state.email,
@@ -27,10 +48,7 @@ export default class LoginPage extends Component {
       .then((response) => {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
-        if (response.status === 200) {
-          console.log("redirect");
-        }
-        // this.props.handler(this.state.email);
+        this.props.handler();
       })
       .catch(function (error) {
         console.log(error);
@@ -38,6 +56,9 @@ export default class LoginPage extends Component {
   };
 
   render() {
+    if (this.state.loggedIn) {
+      return <Redirect to="/home" />;
+    } 
     return (
       <Container>
         <h1>Login Page</h1>
