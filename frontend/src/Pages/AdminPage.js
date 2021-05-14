@@ -42,12 +42,12 @@ export default class AdminPage extends Component {
       .then(function (response) {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
-      })
+        window.location.reload();
+    })
       .catch(function (error) {
         console.log(error);
       });
 
-    window.location.reload();
   };
 
   addData = () => {
@@ -68,12 +68,13 @@ export default class AdminPage extends Component {
       .then(function (response) {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
       });
 
-    window.location.reload();
+
   };
 
   render() {
