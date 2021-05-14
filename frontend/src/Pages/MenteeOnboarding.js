@@ -21,7 +21,7 @@ export default class MenteeOnboarding extends Component {
   onSubmit = () => {
     var config = {
       method: "post",
-      url: "//localhost:8000/createMentee/",
+      url: "//localhost/createMentee/",
       headers: {
         "Content-Type": "text/plain",
       },
