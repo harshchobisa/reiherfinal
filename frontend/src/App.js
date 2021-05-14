@@ -19,6 +19,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 class App extends Component {
   state = {
     user: "",
+    dummy: 0,
   };
 
   constructor(props) {
@@ -27,6 +28,7 @@ class App extends Component {
   }
 
   handleClick = () => {
+    this.setState({ dummy: this.state.dummy + 1 });
     window.location.reload();
   };
 
@@ -58,6 +60,7 @@ class App extends Component {
     })
       .then((response) => {
         console.log(response.status);
+        this.setState({ user: "" });
       })
       .catch(function (error) {
         console.log(error);
@@ -69,7 +72,7 @@ class App extends Component {
       const user = props.user;
 
       if (user !== "") {
-        return <Navbar.Text>Signed in as: {user} </Navbar.Text>;
+        return <Navbar.Text>Signed in as: {user} .</Navbar.Text>;
       } else {
         return <div></div>;
       }
@@ -94,13 +97,14 @@ class App extends Component {
           <div className="App">
             <Route exact path="/" component={LandingPage} />
             <Route path="/home" component={HomePage} />
-            {/* <Route path="/login" component={LoginPage} /> */}
-
             <Route
               path="/login"
               render={() => <LoginPage handler={this.handleClick} />}
             />
-            <Route path="/signup" component={SignupPage} />
+            <Route
+              path="/signup"
+              render={() => <SignupPage handler={this.handleClick} />}
+            />
             <Route path="/family" component={FamilyPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
             <Route path="/mentee_onboarding" component={MenteeOnboarding} />

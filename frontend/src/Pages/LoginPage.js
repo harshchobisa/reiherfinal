@@ -27,9 +27,6 @@ export default class LoginPage extends Component {
       .then((response) => {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
-        if (response.status === 200) {
-          console.log("redirect");
-        }
         this.props.handler();
       })
       .catch(function (error) {
