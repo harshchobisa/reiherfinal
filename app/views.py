@@ -879,4 +879,31 @@ def sendResetEmail(email, token):
 #returns a randomly generated token of length N
 def randStr(chars = string.ascii_uppercase + string.ascii_lowercase + string.digits, N=10):
 	return ''.join(random.choice(chars) for _ in range(N))
+
+@csrf_exempt
+def clear_pairings_database(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
     
+    #only accept requests from users with a logged in, authenticated session
+    if not checkAuthToken(request):
+        return HttpResponse("user not authorized", status=401)
+
+    #make sure this api is only accessible to admins
+    try:
+        user = Users.objects.get(email=request.session["email"])
+        if user.role != "admin":
+            return HttpResponse("not authorized--must be admin to create families", status=401)
+
+    except Exception:
+        return HttpResponse("unable to find user", status=404)
+
+
+    try:
+        Pairings.objects.all().delete()
+    except:
+        return HttpResponse("unable to delete pairings database", status=404)
+
+    return HttpResponse("succesfully deleted pairings database", status=404)
+

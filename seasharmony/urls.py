@@ -35,7 +35,9 @@ urlpatterns = [
     path('getCurrentUser/', views.get_current_user),
     path('populateUsers/', views.populate_users),
     path('requestResetPassword/', views.request_password_reset),
-    path('resetPassword/', views.reset_password)
+    path('resetPassword/', views.reset_password),
+    path('clearPairings/', views.clear_pairings_database)
+
 
 
 ]
