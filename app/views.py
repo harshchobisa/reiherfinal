@@ -51,6 +51,15 @@ def create_user(request):
     except Exception as e:
         return HttpResponse(status=401)
 
+    #make sure that more than one admin account cannot be created
+    if role == "admin":
+        try:
+            user_count = Users.objects.filter(role=role).count() 
+            if user_count > 0:
+                return HttpResponse("cannot have multiple admins", status=406)
+        except Exception as e:
+            return HttpResponse(status=401)
+
 
     #hash password
     key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
@@ -69,7 +78,7 @@ def create_user(request):
 
         request.session['email'] = email
         request.session['token'] = str(token)
-        request.session.set_expiry(3600) #session expires in 3600 seconds = 1 hour
+        request.session.set_expiry(1800) #session expires in 3600 seconds = 1 hour
         return HttpResponse("user succesfully created", status=201)
     except:
         return HttpResponse("error saving user", status=401)
@@ -217,7 +226,7 @@ def login(request):
 
     request.session['email'] = email
     request.session['token'] = str(token)
-    request.session.set_expiry(3600) #session expires in 3600 seconds = 1 hour
+    request.session.set_expiry(1800) #session expires in 3600 seconds = 1 hour
 
     return HttpResponse("login successful", status=200)
 
