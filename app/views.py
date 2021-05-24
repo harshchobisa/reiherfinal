@@ -9,6 +9,7 @@ import random
 from secrets import token_bytes
 import hmac
 import hashlib
+import string
 import time
 from matching.main import *
 from matching.constants import *
@@ -19,7 +20,7 @@ from matching.constants import *
 # from sklearn.metrics.pairwise import euclidean_distances
 # from matching.export import *
 
-from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings
+from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings, PasswordReset
 
 @csrf_exempt
 def index(request): 
@@ -78,7 +79,7 @@ def create_user(request):
 
         request.session['email'] = email
         request.session['token'] = str(token)
-        request.session.set_expiry(1800) #session expires in 3600 seconds = 1 hour
+        request.session.set_expiry(1800) #session expires in 1800 seconds = 0.5 hour
         return HttpResponse("user succesfully created", status=201)
     except:
         return HttpResponse("error saving user", status=401)
@@ -226,7 +227,7 @@ def login(request):
 
     request.session['email'] = email
     request.session['token'] = str(token)
-    request.session.set_expiry(1800) #session expires in 3600 seconds = 1 hour
+    request.session.set_expiry(1800) #session expires in 1800 seconds = 0.5 hour
 
     return HttpResponse("login successful", status=200)
 
@@ -618,6 +619,7 @@ def get_current_user(request):
     except:
         return HttpResponse("unable to get current user", status=404)
 
+
 def create_mentors(num_mentors):
     for i in range(num_mentors):
         string_i = str(i)
@@ -763,6 +765,118 @@ def populate_users(request):
     return create_mentees(num_mentees)
     # return HttpResponse("succcesffuly did it", status=200)
 
+@csrf_exempt
+def reset_password(request):
+
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    #input validation
+    try:
+        payload = json.loads(request.body)
+        email = payload['email']
+        password = payload['password']
+        token = payload['token']
+    except:
+        return HttpResponse("missing/blank email or token", status=401)
+
+    #get the token from the database
+    try:
+        userAndToken = PasswordReset.objects.filter(email=email).filter(resetToken=token)[0]
+    except:
+        return HttpResponse("invalid token", status=401)
+    
+    #if token does not equal our database's token, reject
+    if userAndToken.resetToken != token:
+        return HttpResponse("invalid token", status=401)
+    
+    #check if token is expired or not
+    if float(userAndToken.timestamp) < time.time():
+        return HttpResponse("token expired", status=401)
+
+    #delete token after it is used
+    userAndToken.delete()
 
 
+    #hash password
+    key = 'b\'\\xd3\\xf4\\xb7X\\xbd\\x07"\\xf4a\\\'\\xf5\\x16\\xd7a\\xa4\\xbd\\xf0\\xe7\\x10\\xdeR\\x0el\\xc2fW\\x80\\xfd\\xd39\\x953\''
+    passwordbytes = bytes(password, 'utf-8')
+    keybytes = bytes(key, 'utf-8')
 
+    h = hmac.new( keybytes, passwordbytes, hashlib.sha256 )
+    hashedPassword = str(h.hexdigest())
+    
+    #save user in database
+    user = Users.objects.get(email=email)
+    user.password = hashedPassword
+
+    try:
+        user.save()
+        return HttpResponse("password succesfully updated", status=201)
+    except:
+        return HttpResponse("error saving user", status=401)
+
+
+#TODO change the responses for this method to all be identical
+@csrf_exempt
+def request_password_reset(request):
+    #only accept post requests
+    if request.method != "POST":
+        return HttpResponse("only POST calls accepted", status=404)
+    
+    try:
+        payload = json.loads(request.body)
+        email = payload['email']
+    except:
+        return HttpResponse("missing/blank email", status=401)
+
+    #make sure user exists
+    try:
+        user_count = Users.objects.filter(email=email).count()
+        if user_count != 1:
+            return HttpResponse("unable to find user CHANGE THIS", status=200)
+    except:
+        return HttpResponse("unable to find user CHANGE THIS", status=200)
+
+    #create secure token that is 20 chars long
+    token = randStr(N=20)
+    #this token will only be valid for 10 minutes
+    passwordResetToken = PasswordReset(email=email, resetToken=token, timestamp=time.time() + 600)
+    
+    #save token in database for comparison
+    passwordResetToken.save()
+    
+    sendResetEmail(email, token)
+    return HttpResponse("email sent, token: " + token, status=200)
+
+#sends a reset email given a token and an email
+def sendResetEmail(email, token):
+    import smtplib, ssl
+
+    port = 465  # For SSL
+
+    smtp_server = "smtp.gmail.com"
+    sender_email = "mentorseas@gmail.com" 
+    password = "Mentoring1$"
+
+    receiver_email = email 
+
+    #will have to change this upon deployment
+    link = "localhost:8000/passwordResetPage?token=" + token
+  
+    subject = "MentorSeas Password Reset"
+    text = "Hello, \n\nIf you are recieving this email, a password reset request has been sent for your account at MentorSeas. Follow the link to reset your password.\n\n{link}\n\nBest,\nBC Exec  "
+    text = text.format(link=link)
+    message = 'Subject: {}\n\n{}'.format(subject, text)
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+        server.quit()
+
+#returns a randomly generated token of length N
+def randStr(chars = string.ascii_uppercase + string.ascii_lowercase + string.digits, N=10):
+	return ''.join(random.choice(chars) for _ in range(N))
+    
