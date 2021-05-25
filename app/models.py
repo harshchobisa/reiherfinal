@@ -43,4 +43,10 @@ class Pairings(models.Model):
     email = models.CharField(max_length=50)
     familyid = models.IntegerField()
 
+class PasswordReset(models.Model):
+    email = models.CharField(max_length=50)
+    resetToken = models.CharField(max_length=50)
+    timestamp = models.CharField(max_length=50)
+
+
 
