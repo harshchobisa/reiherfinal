@@ -13,6 +13,7 @@ import "./App.css";
 import { HashRouter, Route } from "react-router-dom";
 import { Nav, Navbar, Container } from "react-bootstrap";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -38,6 +39,7 @@ class App extends Component {
       url: "getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })
@@ -55,6 +57,7 @@ class App extends Component {
       url: "logout/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })

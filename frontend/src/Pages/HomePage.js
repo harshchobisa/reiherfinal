@@ -3,6 +3,7 @@ import { Col, Row, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import FamilyView from "../Components/FamilyView";
+import Cookies from "js-cookie";
 
 export default class HomePage extends Component {
   state = {
@@ -17,6 +18,7 @@ export default class HomePage extends Component {
       url: "getFamily/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })
@@ -32,6 +34,7 @@ export default class HomePage extends Component {
       url: "hasCompletedProfile/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })
@@ -51,6 +54,7 @@ export default class HomePage extends Component {
       url: "isMentor/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })

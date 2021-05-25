@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Button } from "react-bootstrap";
 import axios from "axios";
 import { JsonToTable } from "react-json-to-table";
+import Cookies from "js-cookie";
 
 export default class AdminPage extends Component {
   state = {
@@ -14,6 +15,7 @@ export default class AdminPage extends Component {
       url: "getAllFamilies/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     };
@@ -34,6 +36,7 @@ export default class AdminPage extends Component {
       url: "createFamilies/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     };
@@ -56,6 +59,7 @@ export default class AdminPage extends Component {
       url: "populateUsers/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       data: JSON.stringify({
         num_mentors: 50,

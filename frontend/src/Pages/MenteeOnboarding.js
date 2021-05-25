@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Form, Col } from "react-bootstrap";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default class MenteeOnboarding extends Component {
   state = {
@@ -24,6 +25,7 @@ export default class MenteeOnboarding extends Component {
       url: "createMentee/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       data: JSON.stringify(this.state),
       withCredentials: true,

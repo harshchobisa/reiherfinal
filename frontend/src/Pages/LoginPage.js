@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { Redirect, NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default class LoginPage extends Component {
   state = {
@@ -16,6 +17,7 @@ export default class LoginPage extends Component {
       url: "getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })
@@ -34,17 +36,16 @@ export default class LoginPage extends Component {
       email: this.state.email,
       password: this.state.password,
     });
-    var config = {
+    axios({
       method: "post",
       url: "login/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       data: data,
       withCredentials: true,
-    };
-
-    axios(config)
+    })
       .then((response) => {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
@@ -58,7 +59,7 @@ export default class LoginPage extends Component {
   render() {
     if (this.state.loggedIn) {
       return <Redirect to="/home" />;
-    } 
+    }
     return (
       <Container>
         <h1>Login Page</h1>

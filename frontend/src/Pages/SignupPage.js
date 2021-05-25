@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default class SignupPage extends Component {
   state = {
@@ -18,6 +19,7 @@ export default class SignupPage extends Component {
       url: "getCurrentUser/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       withCredentials: true,
     })
@@ -53,6 +55,7 @@ export default class SignupPage extends Component {
       url: "createUser/",
       headers: {
         "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
       },
       data: data,
       withCredentials: true,

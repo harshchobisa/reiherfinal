@@ -20,9 +20,10 @@ from matching.constants import *
 # from sklearn.metrics.pairwise import euclidean_distances
 # from matching.export import *
 
+from django.middleware.csrf import get_token
+
 from app.models import Users, UserAuthTokens, Mentors, Mentees, Pairings, PasswordReset
 
-@csrf_exempt
 def index(request): 
     return render(request, "index.html")
 
@@ -85,7 +86,6 @@ def create_user(request):
         return HttpResponse("error saving user", status=401)
 
 
-@csrf_exempt
 def create_mentor(request):
     #only accept post requests
     if request.method != "POST":
@@ -144,7 +144,6 @@ def create_mentor(request):
     except:
         return HttpResponse("error saving user", status=401)
 
-@csrf_exempt
 def create_mentee(request):
     #only accept post requests
     if request.method != "POST":
@@ -191,7 +190,6 @@ def create_mentee(request):
 
 
 
-@csrf_exempt
 def login(request):
     #only accept post requests
     if request.method != "POST":
@@ -233,7 +231,6 @@ def login(request):
 
 
 #this function is just used as a test to make sure the session authentication is working
-@csrf_exempt
 def auth_test(request):
     try:
         if checkAuthToken(request.session['email'], request.session['token']):
@@ -287,7 +284,6 @@ def createAuthToken(email):
     return hashedToken
 
 
-@csrf_exempt
 def get_all_families(request):
     #only accept post requests
     if request.method != "POST":
@@ -334,7 +330,6 @@ def getFamily(familyid):
     return familyUsers;
 
 
-@csrf_exempt
 def get_user_family(request):
     #only accept post requests
     if request.method != "POST":
@@ -437,7 +432,6 @@ def convert_json(json_obj, mentor=True):
         matrix = pd.DataFrame(data=return_array, columns=['email', 'firstName', 'lastName', 'year', 'gender', 'major', 'menteeType', 'firstActivity', 'secondActivity', 'thirdActivity', 'fourthActivity', 'fifthActivity'])
     return matrix
 
-@csrf_exempt
 def create_families(request):
     #only accept post requests
     if request.method != "POST":
@@ -517,7 +511,6 @@ def create_families(request):
     return HttpResponse("successfully created all families", status=200)
 
 
-@csrf_exempt
 def has_completed_profile(request):
     #only accept post requests
     if request.method != "POST":
@@ -556,7 +549,6 @@ def has_completed_profile(request):
         return HttpResponse(False, status=200)
 
 
-@csrf_exempt
 def is_mentor(request):
     #only accept post requests
     if request.method != "POST":
@@ -586,7 +578,6 @@ def is_mentor(request):
         return HttpResponse(False, status=200)
 
 
-@csrf_exempt
 def logout(request):
     #only accept post requests
     if request.method != "POST":
@@ -603,7 +594,6 @@ def logout(request):
     except:
         return HttpResponse("error", status=404)
 
-@csrf_exempt
 def get_current_user(request):
     #only accept post requests
     if request.method != "POST":
@@ -701,7 +691,6 @@ def create_mentees(num_mentees):
 
         
 
-@csrf_exempt
 def populate_users(request):
     if request.method != "POST":
         return HttpResponse("only POST calls accepted", status=404)
@@ -765,7 +754,6 @@ def populate_users(request):
     return create_mentees(num_mentees)
     # return HttpResponse("succcesffuly did it", status=200)
 
-@csrf_exempt
 def reset_password(request):
 
     #only accept post requests
@@ -819,7 +807,6 @@ def reset_password(request):
 
 
 #TODO change the responses for this method to all be identical
-@csrf_exempt
 def request_password_reset(request):
     #only accept post requests
     if request.method != "POST":
@@ -880,7 +867,6 @@ def sendResetEmail(email, token):
 def randStr(chars = string.ascii_uppercase + string.ascii_lowercase + string.digits, N=10):
 	return ''.join(random.choice(chars) for _ in range(N))
 
-@csrf_exempt
 def clear_pairings_database(request):
     #only accept post requests
     if request.method != "POST":
@@ -907,3 +893,9 @@ def clear_pairings_database(request):
 
     return HttpResponse("succesfully deleted pairings database", status=404)
 
+@csrf_exempt
+def get_csrf_token(request):
+    token =  get_token(request)
+    response = HttpResponse('success', status=200)
+    # response.set_cookie('csrftoken', token)
+    return response
