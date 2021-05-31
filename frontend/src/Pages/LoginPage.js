@@ -122,7 +122,7 @@ export default class LoginPage extends Component {
               </Button>
             </Row>
             <Row>
-              <NavLink to="/home/" onClick={this.passWordReset}>
+              <NavLink to="/" onClick={this.passWordReset}>
                 Request password reset
               </NavLink>
             </Row>
