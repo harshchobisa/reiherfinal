@@ -46,11 +46,10 @@ export default class AdminPage extends Component {
         console.log(response.status);
         console.log(JSON.stringify(response.data));
         window.location.reload();
-    })
+      })
       .catch(function (error) {
         console.log(error);
       });
-
   };
 
   addData = () => {
@@ -77,8 +76,28 @@ export default class AdminPage extends Component {
       .catch(function (error) {
         console.log(error);
       });
+  };
 
+  clearPairings = () => {
+    var config = {
+      method: "post",
+      url: "clearPairings/",
+      headers: {
+        "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
+      },
+      withCredentials: true,
+    };
 
+    axios(config)
+      .then(function (response) {
+        console.log(response.status);
+        console.log(JSON.stringify(response.data));
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   render() {
@@ -90,6 +109,9 @@ export default class AdminPage extends Component {
         </Button>{" "}
         <Button variant="outline-secondary" onClick={this.addData}>
           Create users
+        </Button>{" "}
+        <Button variant="outline-secondary" onClick={this.clearPairings}>
+          Delete users
         </Button>{" "}
         <p>Here are the families</p>
         {this.state.families.map((family) => (
