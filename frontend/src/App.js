@@ -8,6 +8,7 @@ import MentorOnboarding from "./Pages/MentorOnboarding";
 import MenteeOnboarding from "./Pages/MenteeOnboarding";
 import FamilyPage from "./Pages/FamilyPage";
 import AdminPage from "./Pages/AdminPage";
+import ResetPage from "./Pages/ResetPage";
 
 import "./App.css";
 import { HashRouter, Route } from "react-router-dom";
@@ -109,6 +110,7 @@ class App extends Component {
               render={() => <SignupPage handler={this.handleClick} />}
             />
             <Route path="/family" component={FamilyPage} />
+            <Route path="/passwordResetPage/:token" component={ResetPage} />
             <Route path="/mentor_onboarding" component={MentorOnboarding} />
             <Route path="/mentee_onboarding" component={MenteeOnboarding} />
             <Route path="/admin" component={AdminPage} />

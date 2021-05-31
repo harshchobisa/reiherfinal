@@ -850,7 +850,7 @@ def sendResetEmail(email, token):
     receiver_email = email 
 
     #will have to change this upon deployment
-    link = "localhost:8000/passwordResetPage?token=" + token
+    link = "localhost:8000/passwordResetPage/" + token
   
     subject = "MentorSeas Password Reset"
     text = "Hello, \n\nIf you are recieving this email, a password reset request has been sent for your account at MentorSeas. Follow the link to reset your password.\n\n{link}\n\nBest,\nBC Exec  "
