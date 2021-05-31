@@ -56,6 +56,31 @@ export default class LoginPage extends Component {
       });
   };
 
+  passWordReset = () => {
+    var data = JSON.stringify({
+      email: this.state.email,
+    });
+    axios({
+      method: "post",
+      url: "requestResetPassword/",
+      headers: {
+        "Content-Type": "text/plain",
+        "X-CSRFToken": Cookies.get("XSRF-TOKEN"),
+      },
+      data: data,
+      withCredentials: true,
+    })
+      .then((response) => {
+        console.log(response.status);
+        console.log(JSON.stringify(response.data));
+        this.props.handler();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  
+
   render() {
     if (this.state.loggedIn) {
       return <Redirect to="/home" />;
@@ -95,6 +120,11 @@ export default class LoginPage extends Component {
               <Button href="#/signup/" variant="outline-secondary">
                 Don't have an account? Make one here.
               </Button>
+            </Row>
+            <Row>
+              <NavLink to="/home/" onClick={this.passWordReset}>
+                Request password reset
+              </NavLink>
             </Row>
           </Col>
         </Form>
