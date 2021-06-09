@@ -23,7 +23,13 @@ python3 manage.py runserver
 ```
 
 ### Deploying the app
-- TODO
+- we deloyed the app using AWS Elastic Beanstalk
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html
+- AWS Certificate Manager allows for configuration of SSL/TLS certificates on Elastic Load Balancer to ensure secure HTTPS connection
+https://aws.amazon.com/certificate-manager/
+
+- domain:  env-10.eba-3jpwws2e.us-west-2.elasticbeanstalk.com (currently down to save costs)
+- had to buy new domain to configure SSL, no encryption on locallhost version
 
 ## Features
 
